@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Online Restaurants</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <style>
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url({{ url_for('static', filename='searchicon.png') }})
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 80%;
+  font-size: 12px;
+  padding: 10px 20px 10px 30px;
+  border: 1px solid #ddd;
+  margin-Top: 8px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 18px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+	
+	
+	
+* {
+  box-sizing: border-box;
+}
+a:hover {
+  background-position: bottom;
+  background-repeat: repeat-x;
+  background-size: 20%;
+  border-bottom: 0;
+  padding-bottom: .3em;
+  text-decoration: none;
+  color: Green;
+}
+#table-scroll {
+  height:550px;
+  overflow:auto;
+  margin-top:4px;
+}
+
+
+input[type=submit] {
+  width: 40%;
+  height : 20;
+  background-color: white;
+  color: black;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=button] {
+  width: 40%;
+  background-color: white;
+  color: black;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hover{
+  width: 50%;
+  background-color: Green;
+  color: black;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+/* Style the header */
+header {
+    background-color:black;
+    padding-left: 20px;
+    font-family: Times New Roman;
+    text-align: left;
+    font-size: 30px;
+    color: white;
+    border: 1px solid white;
+}
+        
+section {
+    border: 1px solid white;
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+
+  float: left;
+  width: 20%;
+  height: 550px; /* only for demonstration, should be removed */
+  background: black;
+  padding:0px;
+}
+
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+article {
+    float: left;
+    margin-top: -3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 80%;
+    height: 550px;
+}
+
+/* Clear floats after the columns */
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the footer */
+footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+  color: white;
+}
+
+table {
+  font-family: arial, sans-serif;
+  font-size: 12px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  font-size:12px;
+  padding: 4px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+/*@media (max-width: 600px) {
+  nav, article {
+    width: 100%;
+    height: auto;
+  }
+}*/
+
+    </style>
+</head>
+<body>
+
+<header style="color:White; vertical-align: middle;">
+    <img src="{{ url_for('static', filename='rest.jpg') }}" width="200px" height="50px">
+    <div style="display: inline; margin-left: 330px;">Online Restaurants of The World</div>
+</header>
+<section>
+    <nav>
+        <ul>
+            <center>
+                <div style="border: 1px solid white; margin: 5px; padding: 3px;">
+                    <span style='color: White'> TOTAL CUISINES <br><p id="total"> 0 </p></span>
+                    <hr style="color: White" />
+                    
+                    <span style='color: White'>  Search For Cuisines <br>
+					<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search For Cuisines.." title="Type in a name"> <br><br></span>
+                    </div>
+                
+                <br/>
+                <br/>
+                <br/>
+                
+                <div style="border: 1px solid white; margin: 5px; padding: 3px;">
+					<span style='color: Gold'>  Add New Restaurants <br>  </span>
+					<hr style="color: White" />
+				   <form action="/" enctype="multipart/form-data" method="POST" name="namemain"
+                          onsubmit="return check_file()">
+                        <center><font color=white><input name=file type="file" value=""/> </font></center>
+                        <br/>
+                        <input class=hover type="Submit" />
+                    </form>
+                </div>   
+  </center>
+        </ul>
+    </nav>
+    <article>
+        <div id="table-wrapper">
+            <div id="table-scroll">
+
+                <font color="Black" style="font-weight: bold">
+                    {{data | safe }}
+                </font>
+            </div>
+        </div>
+    </article>
+</section>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  var display = document.getElementById("total");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+	  
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+		display.innerHTML = txtValue.toUpperCase().indexOf(filter);
+      } else {
+        tr[i].style.display = "none";
+		display.innerHTML = 0;
+      }
+    }       
+  }
+}
+</script>
+</body>
+</html>
